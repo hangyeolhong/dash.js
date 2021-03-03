@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+    <html>
+      <head>
+          <title>Adaptive Streaming in HTML5</title>
+          <script src="dist/dash.all.debug.js"></script>
+          <script src="js/FileSaver.js"></script>
+        </head>
+
+
+        <body>
+            <div id="videoSection">
+                <video id = "testVideo" data-dashjs-player autoplay
+                    src="https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd" 
+                    controls width=700 height=300></video>
+
+                    <div style="margin: auto;">
+                            <!-- img icon would be better -->
+                        <button onclick="pause()">Play/Pause</button>  
+                        <button onclick="restart()">Restart</button>  
+                        <button onclick="skip(15)">+15</button>
+                        <button onclick="skip(-15)">-15</button>
+                        <button onClick="save()">Save</button>
+                    </div>
+              </div>
+         
+              <script> 
+              let logMessage = ' ';
+              
+              var testVideo = document.getElementById("testVideo"); 
+          
+              const getTimeStamp = () => {
+                  let timeStamp = '';
+                  var date = new Date();
+                  var year = date.getFullYear();
+
+                  var month = date.getMonth();
+                  if (month<10) month = '0' + month;
+
+                  var day = date.getDate();
+                  if (day<10) day = '0' + day;
+
+                  var hour = date.getHours();
+                  if (hour<10) hour = '0' + hour;
+
+                  var mins = date.getMinutes();
+                  if (mins<10) mins = '0' + mins;
+
+                  var secs = date.getSeconds();
+                  if (secs<10) secs = '0' + secs;
+
+                  var msecs = date.getMilliseconds();
+                  if (msecs<10) msecs = '0' + msecs;
+
+
+                    timeStamp = year + '/' + month + '/' + day + ' ' + hour + ':' + mins + ':' +secs + ':' + msecs;
+                    return timeStamp
+              }
+
+              function pause() { 
+                  if (testVideo.paused){
+                      testVideo.play(); 
+                  }
+
+                  else {
+                      testVideo.pause(); 
+                      let timeStamp = getTimeStamp();
+                      console.log(timeStamp + "   PAUSE");
+                      logMessage += timeStamp + "   PAUSE\n";
+                  }
+              } 
+          
+          
+               function skip(secs) {
+                    testVideo.currentTime += secs;
+                    let timeStamp = getTimeStamp();
+
+                    // rewind
+                    if(secs<0){
+                        console.log(timeStamp + "   REWIND");
+                        logMessage += timeStamp + "   REWIND\n";
+                    }
+
+                    // fast forward
+                    else {
+                        console.log(timeStamp + "  FAST FORWARD");
+                        logMessage += timeStamp + "   FAST FORWARD\n";
+                    }
+               }    
+          
+               function restart() {
+                    testVideo.currentTime = 0; 
+                    let timeStamp = getTimeStamp();
+                    console.log(timeStamp + "   RESTART");
+                    logMessage += timeStamp + "   RESTART\n";
+                }
+          
+                function save(){
+                    var blob = new Blob([logMessage], {type: "text/plain;charset=utf-8"});
+                    saveAs(blob, "logFile.txt");
+                }
+
+            </script> 
+        </body>
+    </html>
