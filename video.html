@@ -20,11 +20,14 @@
                         <button onclick="restart()">Restart</button>  
                         <button onclick="skip(15)">+15</button>
                         <button onclick="skip(-15)">-15</button>
+                        <button onclick="rewind()">Rewind</button>
+                        <button onclick="fastforward()">Fast Forward</button>
+                        <button onclick="normal()">Normal Speed</button>
                         <button onClick="save()">Save</button>
                     </div>
             </div>
          
-              <script> 
+            <script> 
               let logMessage = ' ';
               
               var testVideo = document.getElementById("testVideo"); 
@@ -77,14 +80,14 @@
 
                     // rewind
                     if(secs<0){
-                        console.log(timeStamp + "   REWIND");
-                        logMessage += timeStamp + "   REWIND\n";
+                        console.log(timeStamp + "   SKIP -15");
+                        logMessage += timeStamp + "   SKIP -15\n";
                     }
 
                     // fast forward
                     else {
-                        console.log(timeStamp + "  FAST FORWARD");
-                        logMessage += timeStamp + "   FAST FORWARD\n";
+                        console.log(timeStamp + "  SKIP +15");
+                        logMessage += timeStamp + "   SKIP +15\n";
                     }
                }    
           
@@ -95,9 +98,31 @@
                     logMessage += timeStamp + "   RESTART\n";
                 }
           
+                function rewind() {
+                    testVideo.playbackRate = -2.0;
+                    let timeStamp = getTimeStamp();
+                    console.log(timeStamp + "   REWIND");
+                    logMessage += timeStamp + "   REWIND\n";
+                }
+
+
+                function fastforward() {
+                    testVideo.playbackRate = 2.0;
+                    let timeStamp = getTimeStamp();
+                    console.log(timeStamp + "   FAST FORWARD");
+                    logMessage += timeStamp + "   FAST FORWARD\n";
+                }
+
+                function normal() {
+                    testVideo.playbackRate = 1.0;
+                    let timeStamp = getTimeStamp();
+                    console.log(timeStamp + "   NORMAL SPEED");
+                    logMessage += timeStamp + "   NORMAL SPEED\n";
+                }
+
                 function save(){
                     var blob = new Blob([logMessage], {type: "text/plain;charset=utf-8"});
-                    saveAs(blob, "logFile.txt");
+                    saveAs(blob, "log_file.txt");
                 }
 
             </script> 
